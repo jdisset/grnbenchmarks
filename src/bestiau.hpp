@@ -45,10 +45,10 @@ template <typename W> void display(const W &w, bool needClear = false) {
 		mvprintw(w.H * coef - w.epaisseurBordures * coef + i, 0, bordures.c_str());
 	}
 	attroff(COLOR_PAIR(2));
-	std::string clearObstacles(w.largeurObstacles * coef + 2, ' ');
+	std::string clearObstacles(w.largeurObstacles * coef + 6, ' ');
 	attron(COLOR_PAIR(1));
-	for (size_t r = w.epaisseurBordures * coef + 4;
-	     r < (w.H - w.epaisseurBordures) * coef - 4; ++r) {
+	for (size_t r = w.epaisseurBordures * coef; r < (w.H - w.epaisseurBordures) * coef - 2;
+	     ++r) {
 		mvprintw(r, 0, clearObstacles.c_str());
 	}
 	std::string strObstacles(w.largeurObstacles * coef, ' ');
