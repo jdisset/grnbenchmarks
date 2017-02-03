@@ -38,23 +38,23 @@ template <typename W> void display(const W &w, bool needClear = false) {
 	// bordures
 	std::string bordures(w.W * coef, ' ');
 	attron(COLOR_PAIR(2));
-	for (size_t i = 0; i < w.epaisseurBordures * coef; ++i) {
+	for (size_t i = 0; i < w.epaisseurBordures * coef - 1; ++i) {
 		mvprintw(i, 0, bordures.c_str());
 	}
 	for (size_t i = 0; i < w.epaisseurBordures * coef; ++i) {
 		mvprintw(w.H * coef - w.epaisseurBordures * coef + i, 0, bordures.c_str());
 	}
 	attroff(COLOR_PAIR(2));
-	std::string clearObstacles(w.largeurObstacles * coef + 5, ' ');
+	std::string clearObstacles(w.largeurObstacles * coef + 2, ' ');
 	attron(COLOR_PAIR(1));
-	for (size_t r = w.epaisseurBordures * coef + 1;
-	     r < (w.H - w.epaisseurBordures) * coef - 1; ++r) {
+	for (size_t r = w.epaisseurBordures * coef + 4;
+	     r < (w.H - w.epaisseurBordures) * coef - 4; ++r) {
 		mvprintw(r, 0, clearObstacles.c_str());
 	}
 	std::string strObstacles(w.largeurObstacles * coef, ' ');
 	for (auto &o : w.obstacles) {
 		if (o.x < w.W - w.largeurObstacles) {
-			for (size_t r = w.epaisseurBordures * coef + 1;
+			for (size_t r = w.epaisseurBordures * coef;
 			     r < (w.H - w.epaisseurBordures) * coef - 1; ++r) {
 				attron(COLOR_PAIR(1));
 				mvprintw(r, o.x * coef, clearObstacles.c_str());
@@ -113,7 +113,7 @@ struct World {
 	double dist = 0;
 	Bestiau bestiau;
 	const double g = -1.5;
-	const double force = 15;
+	const double force = 30;
 	double gravity = 2;
 	std::default_random_engine gen{0};
 
