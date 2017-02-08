@@ -1,19 +1,22 @@
 //#define OMP
 #define DISPLAY
 #include <chrono>
+//#include "bestiau.hpp"
+#include "coverage.hpp"
 #include "coverage.hpp"
 #include "include/gaga/gaga.hpp"
-#include "include/grgen/classic.hpp"
+#include "include/grgen/int.hpp"
 #include "include/grgen/grn.hpp"
+#include "ship.hpp"
 #include "signalxp.hpp"
-#include "bestiau.hpp"
 
 int main(int argc, char** argv) {
 	using GRN_t = GRN<Classic>;
-	using XP = FlappyGRNXP;
+	// using XP = DoubleFreqXP;
 	// using XP = LowPassXP;
-
-	const int popSize = 500;
+	// using XP = FlappyGRNXP;
+	// using XP = CoverageXP;
+	using XP = ShipEscape::shipXP;
 
 	if (argc > 1) {
 		std::ifstream t(argv[1]);

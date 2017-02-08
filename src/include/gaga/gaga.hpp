@@ -594,8 +594,8 @@ template <typename DNA> class GA {
 			std::uniform_int_distribution<size_t> d(0, s.size() - 1);
 			nextLeaders.push_back(*s[d(globalRand)]);
 		}
-		// if (verbosity >= 3)
-		cerr << "Found " << nextLeaders.size() << " leaders :" << std::endl;
+		if (verbosity >= 3)
+			cerr << "Found " << nextLeaders.size() << " leaders :" << std::endl;
 
 		// list of objectives
 		unordered_set<string> objectivesList;
@@ -707,8 +707,8 @@ template <typename DNA> class GA {
 				speciationThresholds.push_back(speciationThreshold);
 			}
 		}
-		// if (verbosity >= 3)
-		cerr << "Created the new species. Species size = " << species.size() << std::endl;
+		if (verbosity >= 3)
+			cerr << "Created the new species. Species size = " << species.size() << std::endl;
 
 		assert(species.size() > 0);
 		assert(species.size() == nextLeaders.size());
@@ -721,12 +721,12 @@ template <typename DNA> class GA {
 		                         // invalidating all other pointers;
 		size_t cpt = 0;
 
-		// if (verbosity >= 3) {
-		cerr << "Species sizes : " << std::endl;
-		for (auto &s : species) {
-			cerr << " - " << s.size() << std::endl;
+		if (verbosity >= 3) {
+			cerr << "Species sizes : " << std::endl;
+			for (auto &s : species) {
+				cerr << " - " << s.size() << std::endl;
+			}
 		}
-		//}
 
 		for (auto it = species.begin(); it != species.end();) {
 			if ((*it).size() < minSpecieSize && species.size() > 1) {
@@ -739,22 +739,18 @@ template <typename DNA> class GA {
 				++cpt;
 			}
 		}
-		cerr << "Species sizes after cleanup : " << std::endl;
-		for (auto &s : species) {
-			cerr << " - " << s.size() << std::endl;
-		}
 
 		assert(species.size() > 0);
 		assert(species.size() == nextLeaders.size());
 		assert(species.size() == speciationThresholds.size());
 		assert(species.size() <= popSize / minSpecieSize);
 
-		// if (verbosity >= 3) {
-		cerr << "Need to replace " << toReplace.size() << " individuals" << std::endl;
-		for (auto &i : toReplace) {
-			cerr << " : " << i << ", f = " << i->fitnesses.size() << std::endl;
+		if (verbosity >= 3) {
+			cerr << "Need to replace " << toReplace.size() << " individuals" << std::endl;
+			for (auto &i : toReplace) {
+				cerr << " : " << i << ", f = " << i->fitnesses.size() << std::endl;
+			}
 		}
-//}
 
 // replacing all "deleted" individuals and putting them in existing species
 #ifdef OMP
@@ -794,18 +790,18 @@ template <typename DNA> class GA {
 				             minSpeciationThreshold);
 			}
 		}
-		// if (verbosity >= 3) {
-		cerr << "Speciation thresholds adjusted: " << std::endl;
-		for (auto &s : speciationThresholds) {
-			cerr << " " << s;
-		}
-		cerr << std::endl;
-		cerr << "Species sizes : " << std::endl;
-		for (auto &s : species) {
-			cerr << " - " << s.size() << std::endl;
+		if (verbosity >= 3) {
+			cerr << "Speciation thresholds adjusted: " << std::endl;
+			for (auto &s : speciationThresholds) {
+				cerr << " " << s;
+			}
+			cerr << std::endl;
+			cerr << "Species sizes : " << std::endl;
+			for (auto &s : species) {
+				cerr << " - " << s.size() << std::endl;
+			}
 		}
 	}
-	//}
 
 	template <typename I>  // I is ither Individual<DNA> or Individual<DNA>*
 	vector<Individual<DNA>> produceNOffsprings(size_t n, vector<I> &popu,
@@ -1589,13 +1585,13 @@ template <typename DNA> class GA {
 		struct tm *parts = localtime(&now_c);
 
 		std::stringstream fname;
-		fname << evaluatorName << "_" << parts->tm_mday << "_" << parts->tm_mon + 1 << "_";
+		fname << evaluatorName;// << "_" << parts->tm_mday << "_" << parts->tm_mon + 1 << "_";
 		int cpt = 0;
 		std::stringstream ftot;
 		do {
 			ftot.clear();
 			ftot.str("");
-			ftot << baseFolder << fname.str() << cpt;
+			ftot << baseFolder << fname.str();// << cpt;
 			cpt++;
 		} while (stat(ftot.str().c_str(), &sb) == 0 && S_ISDIR(sb.st_mode));
 		folder = ftot.str();

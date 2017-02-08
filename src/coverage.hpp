@@ -82,7 +82,7 @@ template <typename M> std::tuple<int, int, int> countMap(const M& m) {
 			}
 		}
 	}
-	return {nbVisited, nbNotVisited, nbObstacles};
+	return (std::tuple<int, int, int>){nbVisited, nbNotVisited, nbObstacles};
 }
 
 template <typename A> void printMap(const A& robot) {
@@ -177,10 +177,10 @@ struct CoverageXP {
 	}
 
 	template <typename I> static void evaluate(I& ind, bool dbg = false) {
-		const size_t X = 15;
-		const size_t Y = 15;
+		const size_t X = 10;
+		const size_t Y = 10;
 		const int nbSteps = X * Y * 2;
-		const int NMAP = 6;
+		const int NMAP = 3;
 
 		double fit = 0;
 		auto& g = ind.dna;

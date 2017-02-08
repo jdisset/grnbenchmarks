@@ -16,7 +16,7 @@ file(GLOB SRC
 
 add_executable(evo ${SRC} src/mainevo.cpp)
 add_executable(dbg ${SRC} src/maindbg.cpp)
-add_executable(flappyKeyboard ${SRC} src/mainflappyKeyboard.cpp)
+add_executable(flappyKeyboard ${SRC} src/mainflappykeyboard.cpp)
 target_link_libraries(flappyKeyboard ncurses)
 target_link_libraries(dbg ncurses)
 

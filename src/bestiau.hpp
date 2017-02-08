@@ -45,7 +45,7 @@ template <typename W> void display(const W &w, bool needClear = false) {
 		mvprintw(w.H * coef - w.epaisseurBordures * coef + i, 0, bordures.c_str());
 	}
 	attroff(COLOR_PAIR(2));
-	std::string clearObstacles(w.largeurObstacles * coef + 6, ' ');
+	std::string clearObstacles(w.largeurObstacles * coef + 10, ' ');
 	attron(COLOR_PAIR(1));
 	for (size_t r = w.epaisseurBordures * coef; r < (w.H - w.epaisseurBordures) * coef - 2;
 	     ++r) {
@@ -55,7 +55,7 @@ template <typename W> void display(const W &w, bool needClear = false) {
 	for (auto &o : w.obstacles) {
 		if (o.x < w.W - w.largeurObstacles) {
 			for (size_t r = w.epaisseurBordures * coef;
-			     r < (w.H - w.epaisseurBordures) * coef - 1; ++r) {
+			     r < (w.H - w.epaisseurBordures) * coef - 2; ++r) {
 				attron(COLOR_PAIR(1));
 				mvprintw(r, o.x * coef, clearObstacles.c_str());
 				attron(COLOR_PAIR(3));
@@ -115,7 +115,7 @@ struct World {
 	const double g = -1.5;
 	const double force = 30;
 	double gravity = 2;
-	std::default_random_engine gen{0};
+	std::mt19937 gen{0};
 
 	double dt = 1.0 / 25.0;
 	double vitesseDefilement = 0.5;
