@@ -1,5 +1,5 @@
-#ifndef REALC_HPP
-#define REALC_HPP
+#ifndef MULTIREAL_HPP
+#define MULTIREAL_HPP
 #include <iostream>
 #include <array>
 #include <vector>
@@ -10,17 +10,17 @@
 
 using namespace std;
 
-struct RealC {
+struct MultiReal {
 	// we use 3 coordinates proteins (id, enh, inh)
 	using Protein_t = Protein<3, double, 0, 1>;
 
 	// we need 2 parameters (beta, alpha)
-	static constexpr unsigned int nbParams = 2;
+	static constexpr unsigned int nbParams = 5;
 	// and we produce 2 dimensional signatures (enhnance, inhibit)
 	static constexpr unsigned int nbSignatureParams = 2;
 
 	static const array<pair<double, double>, nbParams> paramsLimits() {
-		return {{{0.5, 2.0}, {0.5, 2.0}}};
+		return {{{0.5, 2.0}, {0.5, 2.0}, {0.0, 1.0}, {0.0, 1.0}, {0.0, 1.0}}};
 	}
 
 	// helpers for proteins coords
@@ -35,7 +35,7 @@ struct RealC {
 
 	double maxEnhance = 0.0, maxInhibit = 0.0;
 
-  RealC() {}
+  MultiReal() {}
 
 	template <typename GRN> void updateSignatures(GRN& grn) {
 		grn.signatures.clear();
@@ -57,30 +57,22 @@ struct RealC {
 			for (size_t j = 0; j < grn.actualProteins.size(); ++j) {
         double inside_enh = 0;
         double inside_inh = 0;
-        switch(grn.impl) {
-        case 0:
+        if (3 * grn.params[2] < 1) {
 				  inside_enh = -grn.params[0]*(grn.signatures[i][j][0]);
 				  inside_inh = -grn.params[0]*(grn.signatures[i][j][1]);
-          break;
-        case 1:
+        } else if (3 * grn.params[2] < 2) {
 				  inside_enh = grn.params[0]*(1.0-grn.signatures[i][j][0])-maxEnhance;
 				  inside_inh = grn.params[0]*(1.0-grn.signatures[i][j][1])-maxInhibit;
-          break;
-        case 2:
+        } else {
 				  inside_enh = grn.params[0]*(1.0-grn.signatures[i][j][0]-maxEnhance);
 				  inside_inh = grn.params[0]*(1.0-grn.signatures[i][j][1]-maxInhibit);
-          break;
         }
-        switch(grn.func) {
-        case 0:
+        if (3 * grn.params[3] < 1) {
           grn.signatures[i][j] = {{exp(inside_enh), exp(inside_inh)}};
-          break;
-        case 1:
+        } else if (3 * grn.params[3] < 2) {
           grn.signatures[i][j] = {{tanh(inside_enh)+1, tanh(inside_inh)+1}};
-          break;
-        case 2:
+        } else {
           grn.signatures[i][j] = {{2/(1+exp(-inside_enh)), 2/(1+exp(-inside_inh))}};
-          break;
         }
 			}
 		}
@@ -103,7 +95,7 @@ struct RealC {
 				                     (enh - inh)));
 			}
 			// Normalizing regul & output proteins concentrations
-      if (grn.norm == 0) {
+      if (grn.params[4] < 0.5) {
         double sumConcentration = 0.0;
         for (auto i : nextProteins) {
           sumConcentration += i;

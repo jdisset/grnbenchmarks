@@ -1,5 +1,5 @@
-#ifndef REALC_HPP
-#define REALC_HPP
+#ifndef CLASSIC_HPP
+#define CLASSIC_HPP
 #include <iostream>
 #include <array>
 #include <vector>
@@ -10,9 +10,11 @@
 
 using namespace std;
 
-struct RealC {
+struct Classic {
+	public:
 	// we use 3 coordinates proteins (id, enh, inh)
-	using Protein_t = Protein<3, double, 0, 1>;
+	static constexpr int IDSIZE = 32;
+	using Protein_t = Protein<3, int, 0, IDSIZE>;
 
 	// we need 2 parameters (beta, alpha)
 	static constexpr unsigned int nbParams = 2;
@@ -24,9 +26,9 @@ struct RealC {
 	}
 
 	// helpers for proteins coords
-	static inline double& getId(Protein_t& p) { return p.coords[0]; }
-	static inline double& getEnh(Protein_t& p) { return p.coords[1]; }
-	static inline double& getInh(Protein_t& p) { return p.coords[2]; }
+	static inline int& getId(Protein_t& p) { return p.coords[0]; }
+	static inline int& getEnh(Protein_t& p) { return p.coords[1]; }
+	static inline int& getInh(Protein_t& p) { return p.coords[2]; }
 
 	// aliases for ProteinType
 	static constexpr ProteinType pinput = ProteinType::input;
@@ -35,7 +37,10 @@ struct RealC {
 
 	double maxEnhance = 0.0, maxInhibit = 0.0;
 
-  RealC() {}
+  Classic() {}
+	// Classic(int f, int i, int n) {
+  //   func = f; impl = i; norm =n;
+  // }
 
 	template <typename GRN> void updateSignatures(GRN& grn) {
 		grn.signatures.clear();
@@ -59,16 +64,16 @@ struct RealC {
         double inside_inh = 0;
         switch(grn.impl) {
         case 0:
-				  inside_enh = -grn.params[0]*(grn.signatures[i][j][0]);
-				  inside_inh = -grn.params[0]*(grn.signatures[i][j][1]);
+				  inside_enh = -grn.params[0]*(grn.signatures[i][j][0]/IDSIZE);
+				  inside_inh = -grn.params[0]*(grn.signatures[i][j][1]/IDSIZE);
           break;
         case 1:
-				  inside_enh = grn.params[0]*(1.0-grn.signatures[i][j][0])-maxEnhance;
-				  inside_inh = grn.params[0]*(1.0-grn.signatures[i][j][1])-maxInhibit;
+				  inside_enh = grn.params[0]*(IDSIZE-grn.signatures[i][j][0])-maxEnhance;
+				  inside_inh = grn.params[0]*(IDSIZE-grn.signatures[i][j][1])-maxInhibit;
           break;
         case 2:
-				  inside_enh = grn.params[0]*(1.0-grn.signatures[i][j][0]-maxEnhance);
-				  inside_inh = grn.params[0]*(1.0-grn.signatures[i][j][1]-maxInhibit);
+				  inside_enh = grn.params[0]*(IDSIZE-grn.signatures[i][j][0]-maxEnhance);
+				  inside_inh = grn.params[0]*(IDSIZE-grn.signatures[i][j][1]-maxInhibit);
           break;
         }
         switch(grn.func) {

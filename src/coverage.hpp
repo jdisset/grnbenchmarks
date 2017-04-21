@@ -136,8 +136,8 @@ template <size_t X, size_t Y> auto generateRandomMap(size_t nbObstacles, int see
 }
 
 struct CoverageXP {
-	template <typename G> static G randomInit(size_t nbReguls = 1) {
-		G g;
+  template <typename G> static G randomInit(size_t nbReguls = 0, int ff = 0, int ii = 0, int nn = 0) {
+		G g(ff, ii, nn);
 		g.randomParams();
 		// 4 inputs :  sumed reward = nbNotVisited in each direction in the next 3 cells, /3
 		g.addRandomProtein(G::ProteinType_t::input, "nN");

@@ -97,9 +97,9 @@ struct Protein {
 	// return sqrt(sum) / getMaxDistance();
 	//}
 	double getDistanceWith(const Protein &p) const {
-		return (0.75 * abs(static_cast<int>(p.coords.at(0) - coords.at(0))) +
-		        0.125 * (abs(static_cast<int>(p.coords.at(1) - coords.at(1))) +
-		                 abs(static_cast<int>(p.coords.at(2) - coords.at(2))))) /
+		return (0.75 * abs(p.coords.at(0) - coords.at(0)) +
+		        0.125 * (abs(p.coords.at(1) - coords.at(1)) +
+		                 abs(p.coords.at(2) - coords.at(2)))) /
 		       static_cast<double>(maxCoord - minCoord);
 	}
 };

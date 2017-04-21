@@ -48,15 +48,25 @@ template <typename Implem> class GRN {
 	// influences
 	int currentStep = 0;
 	Implem implem;
+  int func;
+  int impl;
+  int norm;
 
  public:
 	GRN() { updateSignatures(); }
+
+	GRN(int ff, int ii, int nn) : func(ff), impl(ii), norm(nn) {
+    updateSignatures();
+  }
 
 	GRN(const GRN& grn)
 	    : params(grn.params),
 	      proteinsRefs(grn.proteinsRefs),
 	      actualProteins(grn.actualProteins),
-	      currentStep(grn.currentStep) {
+	      currentStep(grn.currentStep),
+        impl(grn.impl),
+        func(grn.func),
+        norm(grn.norm) {
 		updateSignatures();
 	}
 
@@ -335,6 +345,9 @@ template <typename Implem> class GRN {
 		assert(g0.proteinsRefs[to_underlying(ProteinType::output)].size() ==
 		       g1.proteinsRefs[to_underlying(ProteinType::output)].size());
 		GRN offspring;
+    offspring.func = g0.func;
+    offspring.impl = g0.impl;
+    offspring.norm = g0.norm;
 		assert(offspring.params.size() == g0.params.size());
 		std::uniform_int_distribution<int> d5050(0, 1);
 		std::uniform_real_distribution<double> dReal(0.0, 1.0);
@@ -425,7 +438,7 @@ template <typename Implem> class GRN {
 	/**************************************
 	 *              JSON
 	 *************************************/
-	GRN(const string& js) {
+	GRN(const string& js, int ff, int ii, int nn) {
 		auto o = json::parse(js);
 		assert(o.count("params"));
 		json par = o.at("params");
@@ -440,6 +453,7 @@ template <typename Implem> class GRN {
 				addProtein((ProteinType)t, it.key(), Protein(it.value()));
 			}
 		}
+    func = ff; impl = ii; norm = nn;
 		updateSignatures();
 	}
 

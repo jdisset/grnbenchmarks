@@ -115,7 +115,7 @@ struct World {
 	const double g = -1.5;
 	const double force = 30;
 	double gravity = 2;
-	std::mt19937 gen{0};
+	std::default_random_engine gen{0};
 
 	double dt = 1.0 / 25.0;
 	double vitesseDefilement = 0.5;
@@ -165,8 +165,8 @@ struct World {
 
 struct FlappyGRNXP {
 	static const constexpr int viewDist = 1;
-	template <typename G> static G randomInit(size_t nbReguls = 1) {
-		G g;
+  template <typename G> static G randomInit(size_t nbReguls = 0, int f = 0, int i = 0, int n = 0) {
+		G g(f, i, n);
 		g.randomParams();
 		// input
 		// bestiau's height

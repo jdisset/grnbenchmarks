@@ -7,8 +7,8 @@
 #include <vector>
 
 struct DoubleFreqXP {
-	template <typename G> static G randomInit(size_t nbReguls = 1) {
-		G g;
+	template <typename G> static G randomInit(size_t nbReguls = 0, int f = 0, int i = 0, int n = 0) {
+		G g(f, i, n);
 		g.randomParams();
 		g.addRandomProtein(G::ProteinType_t::input, "i");
 		g.addRandomProtein(G::ProteinType_t::output, "o");
@@ -89,8 +89,8 @@ struct LowPassXP {
 	static const int initSteps = 25;
 	static const int CUT_OFF = 50;
 
-	template <typename G> static G randomInit(size_t nbReguls = 0) {
-		G g;
+  template <typename G> static G randomInit(size_t nbReguls = 0, int f = 0, int i = 0, int n = 0) {
+		G g(f, i, n);
 		g.randomParams();
 		g.addRandomProtein(G::ProteinType_t::input, "i");
 		g.addRandomProtein(G::ProteinType_t::output, "o");

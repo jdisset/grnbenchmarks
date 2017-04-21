@@ -247,7 +247,7 @@ struct World {
 struct shipXP {
 	static const constexpr int NBLASERS = 11;
 	template <typename G> static G randomInit(size_t nbReguls = 1) {
-		G g;
+		G g(0, 0, 0);
 		g.randomParams();
 		g.addRandomProtein(G::ProteinType_t::input, "c");  // cos angle
 		g.addRandomProtein(G::ProteinType_t::input, "s");  // sin angle
