@@ -5,7 +5,7 @@
 #include <random>
 #include <unordered_map>
 
-#ifdef DISPLAY
+#ifdef SHIP_DISPLAY
 #include <QtCore/qmath.h>
 #include <QtGui/QGuiApplication>
 #include <QtGui/QMatrix4x4>
@@ -246,8 +246,8 @@ struct World {
 
 struct shipXP {
 	static const constexpr int NBLASERS = 11;
-	template <typename G> static G randomInit(size_t nbReguls = 1) {
-		G g(0, 0, 0);
+	template <typename G> static G randomInit(size_t nbReguls=1, int ff=0, int ii=0, int nn=0) {
+		G g(ff, ii, nn);
 		g.randomParams();
 		g.addRandomProtein(G::ProteinType_t::input, "c");  // cos angle
 		g.addRandomProtein(G::ProteinType_t::input, "s");  // sin angle
@@ -274,7 +274,7 @@ struct shipXP {
 		auto &g = ind.dna;
 		double d = 0;
 		for (int r = 0; r < NRUN; ++r) {
-#ifdef DISPLAY
+#ifdef SHIP_DISPLAY
 			QSurfaceFormat f;
 			f.setSamples(8);
 			int argc = 0;
@@ -308,7 +308,7 @@ struct shipXP {
 				world.update();
 				finished = world.collided || world.countdown <= 0;
 				if (finished) {
-#ifdef DISPLAY
+#ifdef SHIP_DISPLAY
 					exit(0);
 					app.exit();
 #endif
@@ -316,7 +316,7 @@ struct shipXP {
 				} else
 					return false;
 			};
-#ifdef DISPLAY
+#ifdef SHIP_DISPLAY
 			ShipWindow<World> window(world, stepFunc);
 			window.setFormat(f);
 			window.resize(900, 900);
@@ -332,7 +332,7 @@ struct shipXP {
 		}
 		ind.fitnesses["distance"] = d / static_cast<double>(NRUN);
 
-#ifdef DISPLAY
+#ifdef SHIP_DISPLAY
 		std::cerr << "Fitness = " << ind.fitnesses["distance"] << std::endl;
 #endif
 	}
