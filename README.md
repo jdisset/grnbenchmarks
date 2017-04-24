@@ -46,6 +46,6 @@ Two example GRNs, `flappy.dna` and `ship.dna` have been included for the Flappy
 Bird and Ship Escape problems, respectively.
 
 The Ship Escape problem has been included in headless form but a viewer can be
-found at the (ShipEscape)[https://github.com/jdisset/shipEscape] repository.
+found at the [ShipEscape](https://github.com/jdisset/shipEscape) repository.
 Note that the definition SHIP_DISPLAY must be given in `ship.hpp` to activate
 the necessary viewer functions.
